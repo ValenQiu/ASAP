@@ -64,7 +64,7 @@ class Humanoid_Batch:
         self._parents = mjcf_data['parent_indices']
         self.body_names_augment = copy.deepcopy(mjcf_data['node_names'])
         self._offsets = mjcf_data['local_translation'][None, ].to(device)
-        self._local_rotation = mjcf_data['local_rotation'][None, ].to(device)
+        self._local_rotation = mjcf_data['local_rotation'][None, ].to(device) # wxyz
         self.actuated_joints_idx = np.array([self.body_names.index(k) for k, v in mjcf_data['body_to_joint'].items()])
         
         for m in motors:
@@ -127,7 +127,7 @@ class Humanoid_Batch:
             node_name = xml_node.attrib.get("name")
             # parse the local translation into float list
             pos = np.fromstring(xml_node.attrib.get("pos", "0 0 0"), dtype=float, sep=" ")
-            quat = np.fromstring(xml_node.attrib.get("quat", "1 0 0 0"), dtype=float, sep=" ")
+            quat = np.fromstring(xml_node.attrib.get("quat", "1 0 0 0"), dtype=float, sep=" ") # wxyz
             node_names.append(node_name)
             parent_indices.append(parent_index)
             local_translation.append(pos)
@@ -172,7 +172,7 @@ class Humanoid_Batch:
         pose = pose[..., :len(self._parents), :] # H1 fitted joints might have extra joints
         
         if convert_to_mat:
-            pose_quat = axis_angle_to_quaternion(pose.clone())
+            pose_quat = axis_angle_to_quaternion(pose.clone()) # wxyz
             pose_mat = quaternion_to_matrix(pose_quat)
         else:
             pose_mat = pose

@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and checkpoints
+logs/
+logs_eval/
+*.log
+wandb/
+
+# Temporary files
+*.tmp
+.cache/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Large files that should be downloaded separately
+isaacgym/
+*.tar.gz
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+

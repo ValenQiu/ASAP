@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  asap:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: asap:latest
+    container_name: asap_container
+    
+    # Enable GPU support
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
+    
+    # Mount volumes
+    volumes:
+      - ../:/workspace/ASAP
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.Xauthority:/root/.Xauthority:rw
+      - ~/.cache/torch_extensions:/root/.cache/torch_extensions
+    
+    # Network settings
+    network_mode: host
+    
+    # Keep container running
+    stdin_open: true
+    tty: true
+    
+    # Shared memory size (important for PyTorch)
+    shm_size: '8gb'
+    
+    # Resource limits (optional)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
